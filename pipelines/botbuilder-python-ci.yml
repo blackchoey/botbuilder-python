@@ -86,11 +86,6 @@ jobs:
   - script: 'pylint --rcfile=.pylintrc libraries'
     displayName: Pylint
 
-  - script: 'COVERALLS_REPO_TOKEN=$(PythonCoverallsToken) coveralls'
-    displayName: 'Push test results to coveralls https://coveralls.io/github/microsoft/botbuilder-python'
-    continueOnError: true
-    condition: and(succeeded(), eq(variables['System.PullRequest.IsFork'], 'false'))
-
   - powershell: |
       Set-Location ..
       Get-ChildItem -Recurse -Force
@@ -107,6 +102,3 @@ jobs:
       Get-ChildItem -Path "$(Build.SourcesDirectory)" -Include "*coverage*" | Copy-Item -Destination "$(Build.ArtifactStagingDirectory)/CodeCoverage"
     displayName: 'Copy .coverage Files to CodeCoverage folder'
     continueOnError: true
-
-  - task: ms.vss-governance-buildtask.governance-build-task-component-detection.ComponentGovernanceComponentDetection@0
-    displayName: 'Component Detection'
